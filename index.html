@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منشئ صفحات المطاعم</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #007bff;
+      --secondary: #ffc107;
+      --light: #fffdf5;
+      --dark: #333;
+      --white: #fff;
+      --food-color: #e74c3c;
+    }
+    
+    * {
+      box-sizing: border-box;
+      font-family: "Tahoma", "Arial", sans-serif;
+    }
+    
+    body {
+      background: var(--light);
+      margin: 0;
+      padding: 0;
+      color: var(--dark);
+    }
+    
+    header {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: var(--white);
+      text-align: center;
+      padding: 25px 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .form-section, .preview-section {
+      background: var(--white);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+    
+    h2 {
+      color: var(--primary);
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 10px;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    h2 i {
+      color: var(--secondary);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      outline: none;
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .menu-container, .services-container, .social-container {
+      margin-top: 15px;
+    }
+    
+    .menu-item, .service-item, .social-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .menu-item input, .service-item input, .social-item input {
+      flex: 1;
+    }
+    
+    .btn {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .btn:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background: #545b62;
+    }
+    
+    .btn-warning {
+      background: var(--secondary);
+      color: #333;
+    }
+    
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+    
+    .btn-danger {
+      background: #dc3545;
+    }
+    
+    .btn-danger:hover {
+      background: #c82333;
+    }
+    
+    .btn-food {
+      background: var(--food-color);
+    }
+    
+    .btn-food:hover {
+      background: #c0392b;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .preview {
+      border: 1px solid #ddd;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      max-height: 500px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      direction: ltr;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .generated-code {
+      display: none;
+    }
+    
+    .whatsapp-section {
+      background: #25D366;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .whatsapp-section h3 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .instructions {
+      background: #e7f3ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border-right: 4px solid var(--primary);
+    }
+    
+    .instructions h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    
+    .instructions ol {
+      padding-right: 20px;
+    }
+    
+    .instructions li {
+      margin-bottom: 10px;
+    }
+    
+    footer {
+      text-align: center;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 16px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .developer {
+      font-weight: bold;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .preview-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    
+    .preview-frame {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    
+    .menu-category {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f8ff;
+      border-radius: 10px;
+    }
+    
+    .menu-category h3 {
+      margin-top: 0;
+      color: var(--primary);
+      border-bottom: 1px solid #cce7ff;
+      padding-bottom: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .buttons {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .menu-item, .service-item, .social-item {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-utensils"></i> منشئ صفحات المطاعم</h1>
+    <p>أدخل معلومات مطعمك واحصل على كود HTML جاهز للاستخدام</p>
+  </header>
+
+  <div class="container">
+    <div class="form-section">
+      <h2><i class="fas fa-info-circle"></i> معلومات المطعم الأساسية</h2>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="restaurantName"><i class="fas fa-signature"></i> اسم المطعم</label>
+          <input type="text" id="restaurantName" placeholder="مثال: مطعم السلام">
+        </div>
+        
+        <div class="form-group">
+          <label for="ownerName"><i class="fas fa-user"></i> اسم المالك</label>
+          <input type="text" id="ownerName" placeholder="مثال: حم ولد المختار اميحميد">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="restaurantDescription"><i class="fas fa-file-alt"></i> وصف المطعم</label>
+        <textarea id="restaurantDescription" placeholder="مثال: نقدم أشهى المأكولات المحلية والعالمية بأجود المكونات وأفضل الأسعار. نحرص على تقديم تجربة طعام فريدة في أجواء عائلية مميزة."></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="address"><i class="fas fa-map-marker-alt"></i> العنوان</label>
+          <input type="text" id="address" placeholder="مثال: شارع النخيل، بوكعارة">
+        </div>
+        
+        <div class="form-group">
+          <label for="phone"><i class="fas fa-phone"></i> رقم الهاتف</label>
+          <input type="text" id="phone" placeholder="مثال: +222 27 72 24 35">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="workingHours"><i class="fas fa-clock"></i> ساعات العمل</label>
+          <input type="text" id="workingHours" placeholder="مثال: كل يوم من الساعة 10:00 صباحًا حتى 11:00 مساءً">
+        </div>
+        
+        <div class="form-group">
+          <label for="category"><i class="fas fa-tag"></i> نوع المطعم</label>
+          <select id="category">
+            <option value="مطعم عربي">مطعم عربي</option>
+            <option value="مطعم وجبات سريعة">مطعم وجبات سريعة</option>
+            <option value="مطعم بحري">مطعم بحري</option>
+            <option value="مطعم حلويات">مطعم حلويات</option>
+            <option value="مقهى">مقهى</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="mapLink"><i class="fas fa-map"></i> رابط الخريطة</label>
+        <input type="text" id="mapLink" placeholder="مثال: https://maps.app.goo.gl/zcZ6NZPkNtEa6j6x5">
+      </div>
+      
+      <h2><i class="fas fa-utensils"></i> قائمة الطعام</h2>
+      
+      <div class="menu-category">
+        <h3>المقبلات</h3>
+        <div class="menu-container" id="appetizersContainer">
+          <div class="menu-item">
+            <input type="text" class="dishName" placeholder="اسم الطبق">
+            <input type="text" class="dishPrice" placeholder="السعر">
+            <input type="text" class="dishDescription" placeholder="وصف الطبق">
+            <button type="button" class="btn btn-danger remove-dish">حذف</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="addAppetizer">
+          <i class="fas fa-plus"></i> إضافة مقبلات
+        </button>
+      </div>
+      
+      <div class="menu-category">
+        <h3>الأطباق الرئيسية</h3>
+        <div class="menu-container" id="mainsContainer">
+          <div class="menu-item">
+            <input type="text" class="dishName" placeholder="اسم الطبق">
+            <input type="text" class="dishPrice" placeholder="السعر">
+            <input type="text" class="dishDescription" placeholder="وصف الطبق">
+            <button type="button" class="btn btn-danger remove-dish">حذف</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="addMain">
+          <i class="fas fa-plus"></i> إضافة طبق رئيسي
+        </button>
+      </div>
+      
+      <div class="menu-category">
+        <h3>المشروبات والحلويات</h3>
+        <div class="menu-container" id="dessertsContainer">
+          <div class="menu-item">
+            <input type="text" class="dishName" placeholder="اسم الطبق">
+            <input type="text" class="dishPrice" placeholder="السعر">
+            <input type="text" class="dishDescription" placeholder="وصف الطبق">
+            <button type="button" class="btn btn-danger remove-dish">حذف</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="addDessert">
+          <i class="fas fa-plus"></i> إضافة مشروب أو حلوى
+        </button>
+      </div>
+      
+      <h2><i class="fas fa-concierge-bell"></i> الخدمات الإضافية</h2>
+      <div class="services-container" id="servicesContainer">
+        <div class="service-item">
+          <input type="text" class="serviceName" placeholder="اسم الخدمة (مثال: توصيل مجاني)">
+          <button type="button" class="btn btn-danger remove-service">حذف</button>
+        </div>
+      </div>
+      
+      <button type="button" class="btn btn-secondary" id="addService">
+        <i class="fas fa-plus"></i> إضافة خدمة جديدة
+      </button>
+      
+      <h2><i class="fas fa-share-alt"></i> وسائل التواصل الاجتماعي</h2>
+      <div class="social-container" id="socialContainer">
+        <div class="social-item">
+          <select class="socialType">
+            <option value="facebook">فيسبوك</option>
+            <option value="instagram">انستغرام</option>
+            <option value="twitter">تويتر</option>
+          </select>
+          <input type="text" class="socialLink" placeholder="رابط الصفحة">
+          <button type="button" class="btn btn-danger remove-social">حذف</button>
+        </div>
+      </div>
+      
+      <button type="button" class="btn btn-secondary" id="addSocial">
+        <i class="fas fa-plus"></i> إضافة وسيلة تواصل
+      </button>
+      
+      <div class="whatsapp-section">
+        <h3><i class="fab fa-whatsapp"></i> رابط الواتساب للطلبات</h3>
+        <div class="form-group">
+          <label for="whatsappMsg">رسالة الطلب الافتراضية</label>
+          <input type="text" id="whatsappMsg" placeholder="مرحبًا، أريد طلب الطعام من المطعم">
+        </div>
+      </div>
+      
+      <div class="instructions">
+        <h3><i class="fas fa-lightbulb"></i> إرشادات الاستخدام</h3>
+        <ol>
+          <li>املأ جميع الحقول الأساسية للمطعم</li>
+          <li>أضف أطباقك إلى القائمة (مقبلات، أطباق رئيسية، مشروبات وحلويات)</li>
+          <li>أضف الخدمات التي يقدمها مطعمك (توصيل، حجوزات، إلخ)</li>
+          <li>أضف روابط وسائل التواصل الاجتماعي</li>
+          <li>انقر على زر "توليد الكود" للحصول على كود HTML جاهز</li>
+          <li>انسخ الكود المولد واستخدمه في موقعك</li>
+        </ol>
+      </div>
+      
+      <div class="buttons">
+        <button class="btn btn-food" id="generateCode">
+          <i class="fas fa-code"></i> توليد الكود
+        </button>
+        <button class="btn btn-warning" id="previewPage">
+          <i class="fas fa-eye"></i> معاينة الصفحة
+        </button>
+        <button class="btn btn-secondary" id="resetForm">
+          <i class="fas fa-redo"></i> إعادة تعيين
+        </button>
+      </div>
+    </div>
+    
+    <div class="preview-section generated-code" id="previewSection">
+      <h2><i class="fas fa-file-code"></i> الكود المولد</h2>
+      <p>انسخ الكود أدناه واستخدمه في موقعك:</p>
+      <div class="preview" id="codePreview"></div>
+      <div class="buttons">
+        <button class="btn btn-food" id="copyCode">
+          <i class="fas fa-copy"></i> نسخ الكود
+        </button>
+        <button class="btn btn-warning" id="downloadCode">
+          <i class="fas fa-download"></i> تحميل الكود
+        </button>
+      </div>
+      
+      <div class="preview-container" id="livePreview" style="display: none;">
+        <h2><i class="fas fa-desktop"></i> معاينة مباشرة</h2>
+        <iframe class="preview-frame" id="previewFrame"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2023 منشئ صفحات المطاعم</p>
+    <div class="developer">
+      <i class="fas fa-laptop-code"></i>
+      تصميم وتطوير: أج آجمار - مطور مواقع ويب
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // عناصر DOM
+      const addAppetizerBtn = document.getElementById('addAppetizer');
+      const appetizersContainer = document.getElementById('appetizersContainer');
+      const addMainBtn = document.getElementById('addMain');
+      const mainsContainer = document.getElementById('mainsContainer');
+      const addDessertBtn = document.getElementById('addDessert');
+      const dessertsContainer = document.getElementById('dessertsContainer');
+      const addServiceBtn = document.getElementById('addService');
+      const servicesContainer = document.getElementById('servicesContainer');
+      const addSocialBtn = document.getElementById('addSocial');
+      const socialContainer = document.getElementById('socialContainer');
+      const generateCodeBtn = document.getElementById('generateCode');
+      const previewPageBtn = document.getElementById('previewPage');
+      const resetFormBtn = document.getElementById('resetForm');
+      const copyCodeBtn = document.getElementById('copyCode');
+      const downloadCodeBtn = document.getElementById('downloadCode');
+      const codePreview = document.getElementById('codePreview');
+      const previewSection = document.getElementById('previewSection');
+      const previewFrame = document.getElementById('previewFrame');
+      const livePreview = document.getElementById('livePreview');
+      
+      // إضافة مقبلات جديدة
+      addAppetizerBtn.addEventListener('click', function() {
+        addMenuItem(appetizersContainer);
+      });
+      
+      // إضافة طبق رئيسي جديد
+      addMainBtn.addEventListener('click', function() {
+        addMenuItem(mainsContainer);
+      });
+      
+      // إضافة حلوى جديدة
+      addDessertBtn.addEventListener('click', function() {
+        addMenuItem(dessertsContainer);
+      });
+      
+      // دالة مساعدة لإضافة عنصر قائمة
+      function addMenuItem(container) {
+        const menuItem = document.createElement('div');
+        menuItem.className = 'menu-item';
+        menuItem.innerHTML = `
+          <input type="text" class="dishName" placeholder="اسم الطبق">
+          <input type="text" class="dishPrice" placeholder="السعر">
+          <input type="text" class="dishDescription" placeholder="وصف الطبق">
+          <button type="button" class="btn btn-danger remove-dish">حذف</button>
+        `;
+        container.appendChild(menuItem);
+        
+        menuItem.querySelector('.remove-dish').addEventListener('click', function() {
+          menuItem.remove();
+        });
+      }
+      
+      // إضافة خدمة جديدة
+      addServiceBtn.addEventListener('click', function() {
+        const serviceItem = document.createElement('div');
+        serviceItem.className = 'service-item';
+        serviceItem.innerHTML = `
+          <input type="text" class="serviceName" placeholder="اسم الخدمة (مثال: توصيل مجاني)">
+          <button type="button" class="btn btn-danger remove-service">حذف</button>
+        `;
+        servicesContainer.appendChild(serviceItem);
+        
+        serviceItem.querySelector('.remove-service').addEventListener('click', function() {
+          serviceItem.remove();
+        });
+      });
+      
+      // إضافة وسيلة تواصل جديدة
+      addSocialBtn.addEventListener('click', function() {
+        const socialItem = document.createElement('div');
+        socialItem.className = 'social-item';
+        socialItem.innerHTML = `
+          <select class="socialType">
+            <option value="facebook">فيسبوك</option>
+            <option value="instagram">انستغرام</option>
+            <option value="twitter">تويتر</option>
+          </select>
+          <input type="text" class="socialLink" placeholder="رابط الصفحة">
+          <button type="button" class="btn btn-danger remove-social">حذف</button>
+        `;
+        socialContainer.appendChild(socialItem);
+        
+        socialItem.querySelector('.remove-social').addEventListener('click', function() {
+          socialItem.remove();
+        });
+      });
+      
+      // إضافة حدث لحذف العناصر الأولى
+      document.querySelectorAll('.remove-dish, .remove-service, .remove-social').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (this.closest('.menu-item') && this.closest('.menu-item').parentElement.children.length > 1) {
+            this.closest('.menu-item').remove();
+          } else if (this.closest('.service-item') && document.querySelectorAll('.service-item').length > 1) {
+            this.closest('.service-item').remove();
+          } else if (this.closest('.social-item') && document.querySelectorAll('.social-item').length > 1) {
+            this.closest('.social-item').remove();
+          }
+        });
+      });
+      
+      // توليد الكود
+      generateCodeBtn.addEventListener('click', function() {
+        const restaurantName = document.getElementById('restaurantName').value || 'اسم المطعم';
+        const ownerName = document.getElementById('ownerName').value || 'اسم المالك';
+        const restaurantDescription = document.getElementById('restaurantDescription').value || 'وصف المطعم';
+        const address = document.getElementById('address').value || 'العنوان';
+        const phone = document.getElementById('phone').value || 'رقم الهاتف';
+        const workingHours = document.getElementById('workingHours').value || 'ساعات العمل';
+        const mapLink = document.getElementById('mapLink').value || '#';
+        const category = document.getElementById('category').value || 'مطعم عربي';
+        const whatsappMsg = document.getElementById('whatsappMsg').value || 'مرحبًا، أريد طلب الطعام من المطعم';
+        
+        // جمع المقبلات
+        const appetizers = [];
+        document.querySelectorAll('#appetizersContainer .menu-item').forEach(item => {
+          const name = item.querySelector('.dishName').value;
+          const price = item.querySelector('.dishPrice').value;
+          const description = item.querySelector('.dishDescription').value;
+          
+          if (name && price) {
+            appetizers.push({ name, price, description });
+          }
+        });
+        
+        // جمع الأطباق الرئيسية
+        const mainDishes = [];
+        document.querySelectorAll('#mainsContainer .menu-item').forEach(item => {
+          const name = item.querySelector('.dishName').value;
+          const price = item.querySelector('.dishPrice').value;
+          const description = item.querySelector('.dishDescription').value;
+          
+          if (name && price) {
+            mainDishes.push({ name, price, description });
+          }
+        });
+        
+        // جمع المشروبات والحلويات
+        const desserts = [];
+        document.querySelectorAll('#dessertsContainer .menu-item').forEach(item => {
+          const name = item.querySelector('.dishName').value;
+          const price = item.querySelector('.dishPrice').value;
+          const description = item.querySelector('.dishDescription').value;
+          
+          if (name && price) {
+            desserts.push({ name, price, description });
+          }
+        });
+        
+        // جمع الخدمات
+        const services = [];
+        document.querySelectorAll('.service-item').forEach(item => {
+          const name = item.querySelector('.serviceName').value;
+          if (name) {
+            services.push(name);
+          }
+        });
+        
+        // جمع وسائل التواصل
+        const socialLinks = [];
+        document.querySelectorAll('.social-item').forEach(item => {
+          const type = item.querySelector('.socialType').value;
+          const link = item.querySelector('.socialLink').value;
+          if (link) {
+            socialLinks.push({ type, link });
+          }
+        });
+        
+        // توليد كود HTML
+        let menuHTML = '';
+        
+        // قسم المقبلات
+        if (appetizers.length > 0) {
+          menuHTML += `
+          <div class="container menu-category">
+            <h2><i class="fas fa-apple-alt"></i> المقبلات</h2>
+            <div class="menu-items">
+          `;
+          
+          appetizers.forEach(dish => {
+            menuHTML += `
+              <div class="menu-item-card">
+                <div class="dish-info">
+                  <h3>${dish.name}</h3>
+                  <p class="dish-description">${dish.description || ''}</p>
+                </div>
+                <div class="dish-price">${dish.price}</div>
+              </div>
+            `;
+          });
+          
+          menuHTML += `
+            </div>
+          </div>
+          `;
+        }
+        
+        // قسم الأطباق الرئيسية
+        if (mainDishes.length > 0) {
+          menuHTML += `
+          <div class="container menu-category">
+            <h2><i class="fas fa-drumstick-bite"></i> الأطباق الرئيسية</h2>
+            <div class="menu-items">
+          `;
+          
+          mainDishes.forEach(dish => {
+            menuHTML += `
+              <div class="menu-item-card">
+                <div class="dish-info">
+                  <h3>${dish.name}</h3>
+                  <p class="dish-description">${dish.description || ''}</p>
+                </div>
+                <div class="dish-price">${dish.price}</div>
+              </div>
+            `;
+          });
+          
+          menuHTML += `
+            </div>
+          </div>
+          `;
+        }
+        
+        // قسم المشروبات والحلويات
+        if (desserts.length > 0) {
+          menuHTML += `
+          <div class="container menu-category">
+            <h2><i class="fas fa-ice-cream"></i> المشروبات والحلويات</h2>
+            <div class="menu-items">
+          `;
+          
+          desserts.forEach(dish => {
+            menuHTML += `
+              <div class="menu-item-card">
+                <div class="dish-info">
+                  <h3>${dish.name}</h3>
+                  <p class="dish-description">${dish.description || ''}</p>
+                </div>
+                <div class="dish-price">${dish.price}</div>
+              </div>
+            `;
+          });
+          
+          menuHTML += `
+            </div>
+          </div>
+          `;
+        }
+        
+        let servicesHTML = '';
+        if (services.length > 0) {
+          servicesHTML = `
+          <div class="container">
+            <h2><i class="fas fa-concierge-bell"></i> خدماتنا</h2>
+            <div class="services">
+              <ul>
+          `;
+          
+          services.forEach(service => {
+            servicesHTML += `<li>${service}</li>`;
+          });
+          
+          servicesHTML += `
+              </ul>
+            </div>
+          </div>
+          `;
+        }
+        
+        let socialHTML = '';
+        if (socialLinks.length > 0) {
+          socialHTML = `
+          <div class="container">
+            <h2><i class="fas fa-share-alt"></i> تابعنا على</h2>
+            <div class="social-links">
+          `;
+          
+          socialLinks.forEach(social => {
+            let icon = '';
+            let name = '';
+            
+            switch(social.type) {
+              case 'facebook':
+                icon = 'fab fa-facebook-f';
+                name = 'فيسبوك';
+                break;
+              case 'instagram':
+                icon = 'fab fa-instagram';
+                name = 'انستغرام';
+                break;
+              case 'twitter':
+                icon = 'fab fa-twitter';
+                name = 'تويتر';
+                break;
+            }
+            
+            socialHTML += `
+              <a href="${social.link}" target="_blank" class="social-link">
+                <i class="${icon}"></i> ${name}
+              </a>
+            `;
+          });
+          
+          socialHTML += `
+            </div>
+          </div>
+          `;
+        }
+        
+        // إعداد رابط الواتساب
+        const whatsappLink = `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMsg)}`;
+        
+        const generatedHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${restaurantName} - ${address.split(' ')[0]}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #007bff;
+      --secondary: #ffc107;
+      --light: #fffdf5;
+      --dark: #333;
+      --white: #fff;
+      --food-color: #e74c3c;
+    }
+    
+    * {
+      box-sizing: border-box;
+      font-family: "Tahoma", "Arial", sans-serif;
+    }
+    
+    body {
+      font-family: "Tahoma", sans-serif;
+      background: var(--light);
+      margin: 0;
+      padding: 0;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      text-align: center;
+      padding: 30px 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    h3.owner {
+      margin-top: 10px;
+      font-weight: normal;
+      font-size: 20px;
+      color: #f9f9f9;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 25px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+
+    .info p {
+      margin: 12px 0;
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    .map {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    a.map-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #f0f8ff;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    a.map-link:hover {
+      text-decoration: none;
+      background: #e1f0ff;
+      transform: translateY(-2px);
+    }
+    
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+    }
+    
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+    
+    .order-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--food-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-weight: bold;
+      margin: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+    }
+    
+    .order-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 20px;
+      margin-top: 30px;
+      font-size: 16px;
+    }
+    
+    .menu-category {
+      margin-bottom: 30px;
+    }
+    
+    .menu-category h2 {
+      color: var(--primary);
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 10px;
+    }
+    
+    .menu-item-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border-right: 4px solid var(--secondary);
+      transition: all 0.3s;
+    }
+    
+    .menu-item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    .dish-info h3 {
+      margin: 0 0 8px 0;
+      color: var(--dark);
+    }
+    
+    .dish-description {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .dish-price {
+      font-weight: bold;
+      color: var(--food-color);
+      font-size: 18px;
+    }
+    
+    .services ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .services li {
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      border-right: 4px solid var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .services li:before {
+      content: "✓";
+      color: var(--primary);
+      font-weight: bold;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.3s;
+    }
+    
+    .social-link:hover {
+      background: #e9e9e9;
+      transform: translateY(-2px);
+      text-decoration: none;
+      color: #333;
+    }
+    
+    .category-badge {
+      display: inline-block;
+      background: var(--secondary);
+      color: #333;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    
+    .hero-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 26px;
+      }
+      
+      .social-links {
+        flex-direction: column;
+      }
+      
+      .menu-item-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .dish-price {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-utensils"></i> ${restaurantName}</h1>
+    <h3 class="owner">المالك: ${ownerName}</h3>
+    <p>${restaurantDescription}</p>
+    <div class="category-badge">${category}</div>
+    <div class="hero-buttons">
+      <a href="${whatsappLink}" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i> طلب عبر الواتساب
+      </a>
+      <a href="tel:${phone}" class="order-btn">
+        <i class="fas fa-phone"></i> اتصل للطلب
+      </a>
+    </div>
+  </header>
+
+  <div class="container info">
+    <h2><i class="fas fa-info-circle"></i> معلومات المطعم</h2>
+    <p><strong><i class="fas fa-map-marker-alt"></i> العنوان:</strong> ${address}</p>
+    <p><strong><i class="fas fa-phone"></i> الهاتف:</strong> ${phone}</p>
+    <p><strong><i class="fas fa-clock"></i> ساعات العمل:</strong> ${workingHours}</p>
+    <div class="map">
+      <p><strong><i class="fas fa-map"></i> موقعنا على الخريطة:</strong></p>
+      <a class="map-link" href="${mapLink}" target="_blank">
+        <i class="fas fa-external-link-alt"></i> اضغط هنا لفتح الخريطة
+      </a>
+    </div>
+  </div>
+  
+  ${menuHTML}
+  
+  ${servicesHTML}
+  
+  ${socialHTML}
+
+  <footer>
+    <p>© ${new Date().getFullYear()} ${restaurantName} - ${address} | المالك: ${ownerName}</p>
+    <p>تم التصميم والتطوير بواسطة أج آجمار - مطور مواقع ويب</p>
+  </footer>
+</body>
+</html>`;
+        
+        codePreview.textContent = generatedHTML;
+        previewSection.style.display = 'block';
+        livePreview.style.display = 'none';
+      });
+      
+      // معاينة الصفحة
+      previewPageBtn.addEventListener('click', function() {
+        generateCodeBtn.click();
+        
+        setTimeout(() => {
+          const code = codePreview.textContent;
+          const blob = new Blob([code], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          previewFrame.src = url;
+          livePreview.style.display = 'block';
+          livePreview.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      });
+      
+      // نسخ الكود
+      copyCodeBtn.addEventListener('click', function() {
+        const textArea = document.createElement('textarea');
+        textArea.value = codePreview.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // تغيير نص الزر مؤقتًا للإشارة إلى النجاح
+        const originalText = copyCodeBtn.innerHTML;
+        copyCodeBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
+        setTimeout(() => {
+          copyCodeBtn.innerHTML = originalText;
+        }, 2000);
+      });
+      
+      // تحميل الكود
+      downloadCodeBtn.addEventListener('click', function() {
+        const code = codePreview.textContent;
+        const blob = new Blob([code], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'موقع-المطعم.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+      
+      // إعادة تعيين النموذج
+      resetFormBtn.addEventListener('click', function() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+          input.value = '';
+        });
+        
+        document.getElementById('category').value = 'مطعم عربي';
+        
+        // إعادة تعيين القوائم
+        const resetContainers = [
+          { container: appetizersContainer, count: 1 },
+          { container: mainsContainer, count: 1 },
+          { container: dessertsContainer, count: 1 },
+          { container: servicesContainer, count: 1 },
+          { container: socialContainer, count: 1 }
+        ];
+        
+        resetContainers.forEach(item => {
+          const items = item.container.querySelectorAll('.menu-item, .service-item, .social-item');
+          for (let i = item.count; i < items.length; i++) {
+            items[i].remove();
+          }
+        });
+        
+        previewSection.style.display = 'none';
+        livePreview.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
